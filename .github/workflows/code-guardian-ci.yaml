@@ -8,7 +8,7 @@ jobs:
     name: Execute Code Guardian CI
     steps:
       - name: Annotate PR
-        uses: ErnaneJ/code-guardian-ci@main
+        uses: ErnaneJ/code-guardian-ci@e-deploy
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
