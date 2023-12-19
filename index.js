@@ -26,7 +26,18 @@ const github = require('@actions/github');
       }
     });
 
-    console.log(diffPR);
+    // Lista de caminhos de arquivos ou pastas que você deseja ignorar
+    const caminhosIgnorados = ['dist', 'package-lock.json'];
+
+    // Filtra o diff para excluir linhas relacionadas aos arquivos ou pastas ignorados
+    const diffFiltrado = diffPR.split('\n').filter(line => {
+      const matches = line.match(/^diff --git a\/(.+) b\/(.+)/);
+      if (matches) {
+        const caminhoDoArquivo = matches[1];
+        return !caminhosIgnorados.some(caminhoIgnorado => caminhoDoArquivo.startsWith(caminhoIgnorado));
+      }
+      return true;
+    });
 
     let diffData = {
       additions: 0,
@@ -50,8 +61,6 @@ const github = require('@actions/github');
         - ${diffData.changes} changes \n
         - ${diffData.additions} additions \n
         - ${diffData.deletions} deletions \n
-        - ${githubToken} \n
-        - ${openIAToken} \n
 
         \`\`\`diff
         ${diffPR}
