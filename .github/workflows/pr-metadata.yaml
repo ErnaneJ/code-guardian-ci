@@ -1,0 +1,20 @@
+name: Code Guardian CI
+
+permissions: read-all|write-all
+on: 
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  annotate-pr:
+    runs-on: ubuntu-latest
+    name: Execute Code Guardian CI
+    steps:
+      - name: Annotate PR
+        uses: ErnaneJ/code-guardian-ci@main
+        with:
+          owner: ${{ github.repository_owner }}
+          repo: ${{ github.event.repository.name }}
+          pr_number: ${{ github.event.number }}
+          token_g: ${{ secrets.GITHUB_TOKEN }}
+          token_oia: ${{ secrets.OIA_TOKEN }}
