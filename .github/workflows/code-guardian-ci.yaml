@@ -1,6 +1,5 @@
 name: Code Guardian CI
 
-permissions: read-all|write-all
 on: [workflow_dispatch, push]
 
 jobs:
