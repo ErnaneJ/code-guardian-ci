@@ -1,9 +1,7 @@
 name: Code Guardian CI
 
 permissions: read-all|write-all
-on: 
-  pull_request:
-    types: [opened, reopened, synchronize]
+on: [workflow_dispatch, push]
 
 jobs:
   annotate-pr:
