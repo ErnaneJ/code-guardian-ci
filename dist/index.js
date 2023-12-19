@@ -30801,7 +30801,7 @@ const github = __nccwpck_require__(5438);
     const githubToken = core.getInput('token_g', { required: true });
     const openIAToken = core.getInput('token_oia', { required: true });
 
-    const octokit = new github.getOctokit(token);
+    const octokit = new github.getOctokit(githubToken);
 
     const { data: changedFiles } = await octokit.rest.pulls.listFiles({
       owner,
