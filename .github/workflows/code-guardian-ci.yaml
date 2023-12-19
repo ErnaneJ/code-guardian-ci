@@ -4,7 +4,7 @@ on: [workflow_dispatch, push]
 
 jobs:
   code-guardian-ci:
-    permissions: write-all
+    permissions: read-all|write-all
     runs-on: ubuntu-latest
     name: Execute Code Guardian CI
     steps:
