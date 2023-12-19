@@ -63,7 +63,7 @@ const github = require('@actions/github');
         - ${diffData.deletions} deletions \n
 
         \`\`\`diff
-        ${diffPR}
+        ${diffFiltrado}
         \`\`\`
       `,
       event: 'COMMENT'
