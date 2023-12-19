@@ -11,7 +11,7 @@ const github = require('@actions/github');
 
     const octokit = new github.getOctokit(githubToken);
 
-    const prInfo = await octokit.pulls.get({
+    const prInfo = await octokit.rest.pulls.get({
       owner,
       repo,
       pull_number: prNumber,
