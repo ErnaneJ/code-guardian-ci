@@ -8,7 +8,7 @@ jobs:
     name: Execute Code Guardian CI
     steps:
       - name: Code Guardian CI
-        uses: ErnaneJ/code-guardian-ci@e-deploy
+        uses: ./
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
