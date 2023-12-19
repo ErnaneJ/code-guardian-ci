@@ -30806,7 +30806,7 @@ const github = __nccwpck_require__(5438);
     const prInfo = await octokit.rest.pulls.get({
       owner,
       repo,
-      pull_number: prNumber,
+      pull_number: pr_number,
     });
 
     const diffURL = prInfo.data.diff_url;
