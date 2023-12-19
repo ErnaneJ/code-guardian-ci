@@ -21,7 +21,7 @@ const { fetch } = require('node-fetch');
     const diffURL = prInfo.data.diff_url;
     const response = await fetch(diffURL, {
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${githubToken}`,
       },
     });
 
