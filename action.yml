@@ -19,5 +19,5 @@ inputs:
     description: 'The token to use to access the OpenIA API'
     required: true
 runs:
-  using: 'node20'
+  using: 'node16'
   main: 'dist/index.js'
