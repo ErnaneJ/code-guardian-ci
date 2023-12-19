@@ -11,37 +11,29 @@ const github = require('@actions/github');
 
     const octokit = new github.getOctokit(githubToken);
 
-    const { data: changedFiles } = await octokit.rest.pulls.listFiles({
+    const prInfo = await octokit.pulls.get({
+      owner,
+      repo,
+      pull_number: prNumber,
+    });
+
+    const diffURL = prInfo.data.diff_url;
+    const response = await fetch(diffURL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const diffText = await response.text();
+
+    await octokit.rest.issues.createReview({
       owner,
       repo,
       pull_number: pr_number,
-    });
-
-    let diffData = {
-      additions: 0,
-      deletions: 0,
-      changes: 0
-    };
-
-    diffData = changedFiles.reduce((acc, file) => {
-      acc.additions += file.additions;
-      acc.deletions += file.deletions;
-      acc.changes += file.changes;
-      return acc;
-    }, diffData);
-
-    await octokit.rest.issues.createComment({
-      owner,
-      repo,
-      issue_number: pr_number,
-      body: `
-        Pull Request #${pr_number} has been updated with: \n
-        - ${diffData.changes} changes \n
-        - ${diffData.additions} additions \n
-        - ${diffData.deletions} deletions \n
-        - ${githubToken} \n
-        - ${openIAToken} \n
-      `
+      body: "```diff\n"+`
+        ${diffText}
+      `+"\n```",
+      event: 'COMMENT'
     });
 
   } catch (error) {
