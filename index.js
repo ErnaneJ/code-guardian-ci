@@ -41,7 +41,7 @@ const github = require('@actions/github');
       return acc;
     }, diffData);
 
-    await octokit.rest.issues.createReview({
+    await octokit.rest.pulls.createReview({
       owner,
       repo,
       pull_number: pr_number,

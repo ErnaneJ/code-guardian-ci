@@ -30833,7 +30833,7 @@ const github = __nccwpck_require__(5438);
       return acc;
     }, diffData);
 
-    await octokit.rest.issues.createReview({
+    await octokit.rest.pulls.createReview({
       owner,
       repo,
       pull_number: pr_number,
