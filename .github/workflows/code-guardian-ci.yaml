@@ -3,15 +3,15 @@ name: Code Guardian CI
 on: [workflow_dispatch, push]
 
 jobs:
-  annotate-pr:
+  code-guardian-ci:
     runs-on: ubuntu-latest
     name: Execute Code Guardian CI
     steps:
-      - name: Annotate PR
+      - name: Code Guardian CI
         uses: ErnaneJ/code-guardian-ci@e-deploy
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
           pr_number: ${{ github.event.number }}
-          token_g: ${{ secrets.GITHUB_TOKEN }}
-          token_oia: ${{ secrets.OIA_TOKEN }}
+          token_g: "${{ secrets.GITHUB_TOKEN }}"
+          token_oia: "teste"
