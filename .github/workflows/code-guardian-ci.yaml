@@ -1,6 +1,5 @@
 name: Code Guardian CI
 
-permissions: read-all|write-all
 on: [workflow_dispatch, push]
 
 jobs:
@@ -14,5 +13,5 @@ jobs:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
           pr_number: 1
-          token_g: "${{ secrets.GITHUB_TOKEN }}"
+          token_g: ${{ secrets.GITHUB_TOKEN }}
           token_oia: "teste"
