@@ -31,15 +31,11 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
 
     const commitID = pullRequest.head.sha;
 
-    const ignoredPaths = ['dist', 'package-lock.json'];
-    
-    const diffFiltrado = ClearDiff(diffPR, ignoredPaths);
     const diffData = CaptureDiffMetaData(changedFiles);
-
-    console.log(diffFiltrado);
-
+    
+    const ignoredPaths = ['dist', 'package-lock.json'];
     const patches = parsePatch(diffPR);
-    const fileDiffs = patches.map(patch => {
+    const rawFileDiffs = patches.map(patch => {
       const isFileRemoved = patch.oldFileName === '/dev/null';
       const isFileAdded = patch.newFileName === '/dev/null';
   
@@ -51,6 +47,13 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
         isFileRemoved,
       };
     });
+    const fileDiffs = rawFileDiffs.filter(fileDiff => {
+      return !ignoredPaths.some(ignoredPath => {
+        ignoredPath = ignoredPath.replace(/^(a|b)\//g, '');
+        return fileDiff.path.startsWith(ignoredPath) || fileDiff.path.startsWith('/' + ignoredPath) 
+      });
+    });
+
     console.log('fileDiffs', fileDiffs);
 
     await octokit.rest.pulls.createReview({
