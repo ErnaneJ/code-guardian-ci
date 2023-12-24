@@ -48,7 +48,7 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
       };
     });
     const fileDiffs = rawFileDiffs.filter(fileDiff => {
-      fileDiff.path = fileDiff.path.replace(/^(a|b)\//g, '');
+      fileDiff.path = fileDiff.path.replace(/^((a|b)\/)+/g, '');
       return !ignoredPaths.some(ignoredPath => {
         return fileDiff.path.startsWith(ignoredPath) || fileDiff.path.startsWith('/' + ignoredPath) 
       });
