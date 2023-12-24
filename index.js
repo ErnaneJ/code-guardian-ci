@@ -48,9 +48,9 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
       };
     });
     const fileDiffs = rawFileDiffs.filter(fileDiff => {
+      tempFileDiffPath = fileDiff.path.replace(/^(a|b)\//g, '');
       return !ignoredPaths.some(ignoredPath => {
-        ignoredPath = ignoredPath.replace(/^(a|b)\//g, '');
-        return fileDiff.path.startsWith(ignoredPath) || fileDiff.path.startsWith('/' + ignoredPath) 
+        return tempFileDiffPath.startsWith(ignoredPath) || tempFileDiffPath.startsWith('/' + ignoredPath) 
       });
     });
 

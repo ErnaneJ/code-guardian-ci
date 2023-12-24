@@ -33553,9 +33553,9 @@ const GenerateBodyReview = __nccwpck_require__(2225);
       };
     });
     const fileDiffs = rawFileDiffs.filter(fileDiff => {
+      tempFileDiffPath = fileDiff.path.replace(/^(a|b)\//g, '');
       return !ignoredPaths.some(ignoredPath => {
-        ignoredPath = ignoredPath.replace(/^(a|b)\//g, '');
-        return fileDiff.path.startsWith(ignoredPath) || fileDiff.path.startsWith('/' + ignoredPath) 
+        return tempFileDiffPath.startsWith(ignoredPath) || tempFileDiffPath.startsWith('/' + ignoredPath) 
       });
     });
 
