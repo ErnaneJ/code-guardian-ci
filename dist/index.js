@@ -54,7 +54,7 @@ Respeite as seguintes regras:
 - Seja claro e objetivo nos comentários de revisão, evitando sugestões desnecessárias.
 - Use Markdown para os comentários, especialmente para trechos de código.
 - Evite criar revisões desnecessárias ou repetidas.
-- Para definir o campo "position", use o número da linha da modificação revisada, ignorando as linhas removidas. Esse campo NUNCA deve ter um valor maior que o número de linhas do arquivo se isso acontecer, aponte para a linha correta mais próxima ou para a primeira linha (1).
+- Para definir o campo "position", use o número da linha da modificação revisada, ignorando as linhas removidas. Esse campo NUNCA deve ter um valor maior que o número de linhas do arquivo se isso acontecer, aponte para a primeira linha (1).
 - Busque apontar APENAS erros de sintaxe, lógica ou possíveis BUGS.
 
 NÃO COMENTE O CÓDIGO DIZENDO O QUE FOI FEITO EM TAL LINHA, ESSE NÃO É O SEU PAPEL. APENAS APONTE ERROS DE SINTAXE DA LINGUAGEM UTILIZADA. BASEIE-SE NO CLEAN CODE.
@@ -49059,7 +49059,7 @@ const GenerateCodeReview = __nccwpck_require__(3097);
 
     const diffData = CaptureDiffMetaData(changedFiles);
     
-    const ignoredPaths = ['dist', 'package-lock.json', 'package.json', '.github/workflows/code-guardian-ci.yaml'];
+    const ignoredPaths = ['dist', 'package-lock.json', 'action.yml', 'package.json', '.github/workflows/code-guardian-ci.yaml'];
     const patches = parsePatch(diffPR);
     const rawFileDiffs = patches.map(patch => {
       const isFileRemoved = patch.oldFileName === '/dev/null';
