@@ -42,9 +42,7 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
       return {
         path: isFileRemoved ? patch.newFileName : patch.oldFileName,
         newFilePath: patch.newFileName,
-        diff: patch.hunks.map(hunk => hunk.lines.join('\n')).join('\n'),
-        isFileAdded,
-        isFileRemoved,
+        diff: patch.hunks.map(hunk => hunk.lines.join('\n')).join('\n')
       };
     });
     const fileDiffs = rawFileDiffs.filter(fileDiff => {
