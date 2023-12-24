@@ -24,17 +24,23 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
       mediaType: { format: 'diff' }
     });
 
+    const { data: pullRequest } = await octokit.rest.pulls.get({
+      owner, repo, pull_number: pr_number,
+    });
+
+    const commitID = pullRequest.head.sha;
+
     const ignoredPaths = ['dist', 'package-lock.json'];
     const diffFiltrado = ClearDiff(diffPR, ignoredPaths);
     const diffData = CaptureDiffMetaData(changedFiles);
 
-    console.log(diffData);
+    console.log(diffFiltrado);
 
     await octokit.rest.pulls.createReview({
       owner,
       repo,
       pull_number: pr_number,
-      commit_id: github.context.sha,
+      commit_id: commitID,
       body: GenerateBodyReview({pr_number, diffData, diffFiltrado}),
       event: 'COMMENT',
       comments: [
