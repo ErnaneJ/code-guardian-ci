@@ -1,6 +1,38 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 5896:
+/***/ ((module) => {
+
+module.exports = function CaptureDiffMetaData(changedFiles) {
+  let diffData = { additions: 0, deletions: 0,  changes: 0 };
+
+  return changedFiles.reduce((acc, file) => {
+    acc.additions += file.additions;
+    acc.deletions += file.deletions;
+    acc.changes += file.changes;
+    return acc;
+  }, diffData);
+}
+
+/***/ }),
+
+/***/ 5299:
+/***/ ((module) => {
+
+module.exports = function ClearDiff(diff, ignoreFiles){
+  return diff.split('\n').filter(line => {
+    const matches = line.match(/^diff --git a\/(.+) b\/(.+)/);
+    if (matches) {
+      const filePath = matches[1];
+      return !ignoreFiles.some(ignoredFile => filePath.startsWith(ignoredFile));
+    }
+    return true;
+  });
+}
+
+/***/ }),
+
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -30793,6 +30825,9 @@ var __webpack_exports__ = {};
 const core = __nccwpck_require__(2186);
 const github = __nccwpck_require__(5438);
 
+const ClearDiff = __nccwpck_require__(5299);
+const CaptureDiffMetaData = __nccwpck_require__(5896);
+
 (async () => {
   try{
     const owner = core.getInput('owner', { required: true });
@@ -30804,60 +30839,23 @@ const github = __nccwpck_require__(5438);
     const octokit = new github.getOctokit(githubToken);
 
     const { data: changedFiles } = await octokit.rest.pulls.listFiles({
-      owner,
-      repo,
-      pull_number: pr_number,
+      owner, repo, pull_number: pr_number,
     });
 
     const { data: diffPR } = await octokit.rest.pulls.get({
-      owner,
-      repo,
-      pull_number: pr_number,
-      mediaType: {
-        format: 'diff'
-      }
+      owner, repo, pull_number: pr_number,
+      mediaType: { format: 'diff' }
     });
 
-    // Lista de caminhos de arquivos ou pastas que você deseja ignorar
-    const caminhosIgnorados = ['dist', 'package-lock.json'];
-
-    // Filtra o diff para excluir linhas relacionadas aos arquivos ou pastas ignorados
-    const diffFiltrado = diffPR.split('\n').filter(line => {
-      const matches = line.match(/^diff --git a\/(.+) b\/(.+)/);
-      if (matches) {
-        const caminhoDoArquivo = matches[1];
-        return !caminhosIgnorados.some(caminhoIgnorado => caminhoDoArquivo.startsWith(caminhoIgnorado));
-      }
-      return true;
-    });
-
-    let diffData = {
-      additions: 0,
-      deletions: 0,
-      changes: 0
-    };
-
-    diffData = changedFiles.reduce((acc, file) => {
-      acc.additions += file.additions;
-      acc.deletions += file.deletions;
-      acc.changes += file.changes;
-      return acc;
-    }, diffData);
+    const ignoredPaths = ['dist', 'package-lock.json'];
+    const diffFiltrado = ClearDiff(diffPR, ignoredPaths);
+    const diffData = CaptureDiffMetaData(changedFiles);
 
     await octokit.rest.pulls.createReview({
       owner,
       repo,
       pull_number: pr_number,
-      body: `
-        Pull Request #${pr_number} has been updated with: \n
-        - ${diffData.changes} changes \n
-        - ${diffData.additions} additions \n
-        - ${diffData.deletions} deletions \n
-
-        \`\`\`diff
-        ${diffFiltrado}
-        \`\`\`
-      `,
+      body: GenerateBodyReview({pr_number, diffData, diffFiltrado}),
       event: 'COMMENT'
     });
 
