@@ -4,7 +4,7 @@
 /***/ 5896:
 /***/ ((module) => {
 
-module.exports = function CaptureDiffMetaData(changedFiles) {
+function CaptureDiffMetaData(changedFiles) {
   let diffData = { additions: 0, deletions: 0,  changes: 0 };
 
   return changedFiles.reduce((acc, file) => {
@@ -14,6 +14,8 @@ module.exports = function CaptureDiffMetaData(changedFiles) {
     // return acc;
   }, diffData);
 }
+
+module.exports = CaptureDiffMetaData;
 
 /***/ }),
 
