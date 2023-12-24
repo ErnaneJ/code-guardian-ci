@@ -2,9 +2,9 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const { parsePatch } = require('diff');
 
-const ClearDiff = require('./helpers/ClearDiff');
 const CaptureDiffMetaData = require('./helpers/CaptureDiffMetaData');
 const GenerateBodyReview = require('./helpers/GenerateBodyReview');
+const GenerateCodeReview = require('./helpers/GenerateReviews');
 
 (async () => {
   try{
@@ -54,8 +54,8 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
       });
     });
 
-    console.log('fileDiffs', fileDiffs);
-
+    const comments = await GenerateCodeReview(fileDiffs, openIAToken, "gpt-3.5-turbo");
+    console.log(comments)
     await octokit.rest.pulls.createReview({
       owner,
       repo,
@@ -63,13 +63,7 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
       commit_id: commitID,
       body: GenerateBodyReview({pr_number, diffData, diffFiltrado: '...'}),
       event: 'COMMENT',
-      comments: [
-        {
-          path: 'package.json',
-          position: 1,
-          body: 'This is a comment on a line',
-        }
-      ]
+      comments: comments
     });
 
   } catch (error) {
