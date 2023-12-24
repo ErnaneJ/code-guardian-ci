@@ -1,2 +1,2 @@
-cont variable = 123;
-CompositionEvent.log(variable);
+const variable = 1,23;
+console.log(variable);
