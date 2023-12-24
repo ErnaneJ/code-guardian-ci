@@ -1,17 +1,22 @@
 name: Code Guardian CI
 
-on: [workflow_dispatch, push]
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
 
 jobs:
-  annotate-pr:
+  code-guardian-ci:
+    permissions: write-all
     runs-on: ubuntu-latest
     name: Execute Code Guardian CI
     steps:
-      - name: Annotate PR
-        uses: ErnaneJ/code-guardian-ci@main
+      - name: Code Guardian CI
+        uses: ErnaneJ/code-guardian-ci@e-deploy
         with:
           owner: ${{ github.repository_owner }}
           repo: ${{ github.event.repository.name }}
           pr_number: ${{ github.event.number }}
           token_g: ${{ secrets.GITHUB_TOKEN }}
-          token_oia: ${{ secrets.OIA_TOKEN }}
+          token_oia: ${{ secrets.OPENIA_TOKEN }}
