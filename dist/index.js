@@ -30858,7 +30858,7 @@ const GenerateBodyReview = __nccwpck_require__(2225);
 
     const { data: diffPR } = await octokit.rest.pulls.get({
       owner, repo, pull_number: pr_number,
-      mediaType: { format: 'diff' }
+      mediaType: { format: 'json' }
     });
 
     const { data: pullRequest } = await octokit.rest.pulls.get({

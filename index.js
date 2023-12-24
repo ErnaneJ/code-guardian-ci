@@ -21,7 +21,7 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
 
     const { data: diffPR } = await octokit.rest.pulls.get({
       owner, repo, pull_number: pr_number,
-      mediaType: { format: 'diff' }
+      mediaType: { format: 'json' }
     });
 
     const { data: pullRequest } = await octokit.rest.pulls.get({
