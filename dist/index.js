@@ -57,6 +57,8 @@ Respeite as seguintes regras:
 - Para definir o campo "position", use o número da linha da modificação revisada, ignorando as linhas removidas. Esse campo NUNCA deve ter um valor maior que o número de linhas do arquivo se isso acontecer, aponte para a primeira linha (1).
 - Busque apontar APENAS erros de sintaxe, lógica ou possíveis BUGS.
 
+NÃO COMENTE O CÓDIGO DIZENDO O QUE FOI FEITO EM TAL LINHA, ESSE NÃO É O SEU PAPEL. APENAS APONTE ERROS, BUGS OU POSSÍVEIS MELHORIAS.
+
 ATENÇÃO: SEU RETORNO DEVE SER APENAS O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INÍCIO OU NO FINAL, APENAS O ARRAY.`
 
 async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-turbo"){
@@ -49055,7 +49057,7 @@ const GenerateCodeReview = __nccwpck_require__(3097);
 
     const diffData = CaptureDiffMetaData(changedFiles);
     
-    const ignoredPaths = ['dist', 'package-lock.json'];
+    const ignoredPaths = ['dist', 'package-lock.json', 'package.json'];
     const patches = parsePatch(diffPR);
     const rawFileDiffs = patches.map(patch => {
       const isFileRemoved = patch.oldFileName === '/dev/null';

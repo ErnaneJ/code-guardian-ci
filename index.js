@@ -33,7 +33,7 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
 
     const diffData = CaptureDiffMetaData(changedFiles);
     
-    const ignoredPaths = ['dist', 'package-lock.json'];
+    const ignoredPaths = ['dist', 'package-lock.json', 'package.json'];
     const patches = parsePatch(diffPR);
     const rawFileDiffs = patches.map(patch => {
       const isFileRemoved = patch.oldFileName === '/dev/null';
