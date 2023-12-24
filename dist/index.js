@@ -11,7 +11,7 @@ module.exports = function CaptureDiffMetaData(changedFiles) {
     acc.additions += file.additions;
     acc.deletions += file.deletions;
     acc.changes += file.changes;
-    return acc;
+    // return acc;
   }, diffData);
 }
 
@@ -44,7 +44,7 @@ const promptBase = `You are a code CRITICITOR. Its task is to return an array of
   "body": "STRING[MARKDOWN]" // Review comment
 }, ...]
 
-Your review comment must be in markdown format.
+Its job is to point out possible problems caused by the change (diff) made. Your review comment must be in markdown format.
 
 ATTENTION: YOUR CODE REVIEW MUST BE JUST THE ARRAY IN JSON.STRINGIFY FORMAT, WITHOUT TEXT OR "\`" AT THE BEGINNING OR END, JUST THE ARRAY.`
 
