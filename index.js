@@ -38,11 +38,14 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
     const rawFileDiffs = patches.map(patch => {
       const isFileRemoved = patch.oldFileName === '/dev/null';
       const isFileAdded = patch.newFileName === '/dev/null';
+
+      const lines = patch.hunks.map(hunk => hunk.lines.map(line => line.content)).flat();
   
       return {
         path: isFileRemoved ? patch.newFileName : patch.oldFileName,
         newFilePath: patch.newFileName,
-        diff: patch.hunks.map(hunk => hunk.lines.join('\n')).join('\n')
+        diff: patch.hunks.map(hunk => hunk.lines.join('\n')).join('\n'),
+        lines: lines,
       };
     });
     const fileDiffs = rawFileDiffs.filter(fileDiff => {
