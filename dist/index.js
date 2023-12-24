@@ -36,16 +36,11 @@ module.exports = function ClearDiff(diff, ignoreFiles){
 /***/ 2225:
 /***/ ((module) => {
 
-module.exports = function GenerateBodyReview({pr_number, diffData, diffFiltrado}) {
+module.exports = function GenerateBodyReview({pr_number, diffData}) {
   let body = `Pull Request #${pr_number} has been updated with: \n`
   body += `- ${diffData.changes} changes \n`
   body += `- ${diffData.additions} additions \n`
   body += `- ${diffData.deletions} deletions \n\n`
-
-  body += 'Modifications: \n'
-  body += '```diff\n'
-  body += `${diffFiltrado}\n`
-  body += '```'
   return body
 }
 
@@ -30870,12 +30865,22 @@ const GenerateBodyReview = __nccwpck_require__(2225);
     const diffFiltrado = ClearDiff(diffPR, ignoredPaths);
     const diffData = CaptureDiffMetaData(changedFiles);
 
+    console.log(diffData);
+
     await octokit.rest.pulls.createReview({
       owner,
       repo,
       pull_number: pr_number,
+      commit_id: github.context.sha,
       body: GenerateBodyReview({pr_number, diffData, diffFiltrado}),
-      event: 'COMMENT'
+      event: 'COMMENT',
+      comments: [
+        {
+          path: 'package.json',
+          position: 1,
+          body: 'This is a comment on a line',
+        }
+      ]
     });
 
   } catch (error) {

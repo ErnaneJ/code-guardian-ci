@@ -28,12 +28,22 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
     const diffFiltrado = ClearDiff(diffPR, ignoredPaths);
     const diffData = CaptureDiffMetaData(changedFiles);
 
+    console.log(diffData);
+
     await octokit.rest.pulls.createReview({
       owner,
       repo,
       pull_number: pr_number,
+      commit_id: github.context.sha,
       body: GenerateBodyReview({pr_number, diffData, diffFiltrado}),
-      event: 'COMMENT'
+      event: 'COMMENT',
+      comments: [
+        {
+          path: 'package.json',
+          position: 1,
+          body: 'This is a comment on a line',
+        }
+      ]
     });
 
   } catch (error) {
