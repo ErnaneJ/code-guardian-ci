@@ -45,6 +45,7 @@ const promptBase = `Você é um CRITICADOR de código. Sua tarefa é retornar um
 Pontos importantes:
 - SOMENTE VALIDE A SINTAXE DO ARQUIVO, NÃO É NECESSÁRIO VALIDAR NADA ALÉM DISSO
 - FOQUE EM ERROS DE SINTAXE DA LINGUAGEM DO ARQUIVO EM QUESTÃO
+- Lembre-se que o que você está vendo sobre o arquivo é apenas um trecho dele, então não atente-se ao contexto do código, apenas valide a sintaxe
 
 ATENÇÃO: SEU RETORNO DEVE SER APENAS O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INÍCIO OU NO FINAL, APENAS O ARRAY.`
 
