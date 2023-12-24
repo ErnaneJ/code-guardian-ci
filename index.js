@@ -63,7 +63,7 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
       return {
         ...comment,
         path: path,
-        position: isNaN(position) ? 1 : (position > 20 ? 1 : position),
+        position: isNaN(position) ? 1 : position,
       }
     })
     console.log("=====================================")
