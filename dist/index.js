@@ -49094,7 +49094,7 @@ const GenerateCodeReview = __nccwpck_require__(3097);
       return {
         ...comment,
         path: path,
-        position: isNaN(position) ? 1 : position,
+        position: isNaN(position) ? 1 : (position > 20 ? 20 : position),
       }
     })
     console.log("=====================================")
