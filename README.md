@@ -4,6 +4,8 @@
 
 ![Code Guardian CI](./assets/preview-code-guardian-ci.jpeg)
 
+See this review comment [here](https://github.com/ErnaneJ/code-guardian-ci/pull/4#pullrequestreview-1795629618).
+
 ## Description
 
 Code Guardian CI is an automated code review GitHub Action that leverages the power of ChatGPT to provide insightful feedback on your pull requests. This action uses prompts in ChatGPT to analyze your code changes and offers suggestions to improve code quality.
