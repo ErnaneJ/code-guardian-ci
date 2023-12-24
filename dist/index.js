@@ -49052,13 +49052,13 @@ const GenerateCodeReview = __nccwpck_require__(3097);
       const isFileRemoved = patch.oldFileName === '/dev/null';
       const isFileAdded = patch.newFileName === '/dev/null';
 
-      const lines = patch.hunks.map(hunk => hunk.lines.map(line => line.content)).flat();
+      const lines = patch.hunks.map(hunk => hunk.lines.join('\n')).flat();
   
       return {
         path: isFileRemoved ? patch.newFileName : patch.oldFileName,
         newFilePath: patch.newFileName,
-        diff: patch.hunks.map(hunk => hunk.lines.join('\n')).join('\n'),
-        lines: lines,
+        diff: patch.hunks.map(hunk => hunk.lines.join('\n')),
+        lines: lines.filter(line => !line.startsWith('- ')).length,
       };
     });
     console.log(rawFileDiffs)
