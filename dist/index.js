@@ -49058,7 +49058,7 @@ const GenerateCodeReview = __nccwpck_require__(3097);
         path: isFileRemoved ? patch.newFileName : patch.oldFileName,
         newFilePath: patch.newFileName,
         diff: patch.hunks.map(hunk => hunk.lines.join('\n')),
-        lines: lines.filter(line => !line.startsWith('- ')).length,
+        lines: lines.filter(line => !line.startsWith('-') && !line.startsWith('\\ No newline')).length,
       };
     });
     console.log(rawFileDiffs)
