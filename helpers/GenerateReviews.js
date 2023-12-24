@@ -1,18 +1,19 @@
 const OpenAIApi = require("openai");
 
-const promptBase = `Você é um CRITICADOR de código. Sua tarefa é retornar um array de objetos com a seguinte estrutura:
+// only for testing
+const promptBase = `You are a code CRITICITOR. Its task is to return an array of objects with the following structure:
 [{
-  "path": "STRING", // Caminho do arquivo
-  "position": "INTEGER", // Linha da modificação revisada (VALOR ENTRE 1 E A QUANTIDADE DE LINHAS DO ARQUIVO)
-  "body": "STRING[MARKDOWN]" // Comentário de revisão
+  "path": "STRING", // File path
+  "position": "INTEGER", // Revised modification line (VALUE BETWEEN 1 AND THE NUMBER OF LINES IN THE FILE)
+  "body": "STRING[MARKDOWN]" // Review comment
 }, ...]
 
-Pontos importantes:
-- SOMENTE VALIDE A SINTAXE DO ARQUIVO, NÃO É NECESSÁRIO VALIDAR NADA ALÉM DISSO
-- FOQUE EM ERROS DE SINTAXE DA LINGUAGEM DO ARQUIVO EM QUESTÃO
-- Lembre-se que o que você está vendo sobre o arquivo é apenas um trecho dele, então não atente-se ao contexto do código, apenas valide a sintaxe
+Important points:
+- ONLY VALIDATE THE FILE SYNTAX, IT IS NOT NECESSARY TO VALIDATE ANYTHING BEYOND THAT
+- FOCUS ON SYNTAX ERRORS IN THE LANGUAGE OF THE FILE IN QUESTION
+- Remember that what you are seeing about the file is just a snippet of it, so don't pay attention to the context of the code, just validate the syntax
 
-ATENÇÃO: SEU RETORNO DEVE SER APENAS O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INÍCIO OU NO FINAL, APENAS O ARRAY.`
+ATTENTION: YOUR RETURN MUST BE JUST THE ARRAY IN JSON.STRINGIFY FORMAT, WITHOUT TEXT OR "\`" AT THE BEGINNING OR END, JUST THE ARRAY.`
 
 async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-turbo"){
   return await Promise.all(fileDiffs.map(async diff => {
