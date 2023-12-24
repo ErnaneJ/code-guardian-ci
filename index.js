@@ -1,5 +1,6 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
+const { parsePatch } = require('diff');
 
 const ClearDiff = require('./helpers/ClearDiff');
 const CaptureDiffMetaData = require('./helpers/CaptureDiffMetaData');
@@ -21,7 +22,7 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
 
     const { data: diffPR } = await octokit.rest.pulls.get({
       owner, repo, pull_number: pr_number,
-      mediaType: { format: 'json' }
+      mediaType: { format: 'diff' }
     });
 
     const { data: pullRequest } = await octokit.rest.pulls.get({
@@ -31,10 +32,20 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
     const commitID = pullRequest.head.sha;
 
     const ignoredPaths = ['dist', 'package-lock.json'];
+    
     const diffFiltrado = ClearDiff(diffPR, ignoredPaths);
     const diffData = CaptureDiffMetaData(changedFiles);
 
     console.log(diffFiltrado);
+
+    const patches = parsePatch(diffPR);
+    const fileDiffs = patches.map(patch => {
+      return {
+        path: patch.oldFileName || patch.newFileName,
+        diff: patch.hunks.map(hunk => hunk.lines.join('\n')).join('\n'),
+      };
+    });
+    console.log('fileDiffs', fileDiffs);
 
     await octokit.rest.pulls.createReview({
       owner,
