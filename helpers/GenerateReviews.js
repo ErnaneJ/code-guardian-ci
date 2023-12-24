@@ -2,18 +2,16 @@ const OpenAIApi = require("openai");
 
 // only for testing
 const promptBase = `You are a code CRITICITOR. Its task is to return an array of objects with the following structure:
+
 [{
   "path": "STRING", // File path
   "position": "INTEGER", // Revised modification line (VALUE BETWEEN 1 AND THE NUMBER OF LINES IN THE FILE)
   "body": "STRING[MARKDOWN]" // Review comment
 }, ...]
 
-Important points:
-- ONLY VALIDATE THE FILE SYNTAX, IT IS NOT NECESSARY TO VALIDATE ANYTHING BEYOND THAT
-- FOCUS ON SYNTAX ERRORS IN THE LANGUAGE OF THE FILE IN QUESTION
-- Remember that what you are seeing about the file is just a snippet of it, so don't pay attention to the context of the code, just validate the syntax
+Your review comment must be in markdown format.
 
-ATTENTION: YOUR RETURN MUST BE JUST THE ARRAY IN JSON.STRINGIFY FORMAT, WITHOUT TEXT OR "\`" AT THE BEGINNING OR END, JUST THE ARRAY.`
+ATTENTION: YOUR CODE REVIEW MUST BE JUST THE ARRAY IN JSON.STRINGIFY FORMAT, WITHOUT TEXT OR "\`" AT THE BEGINNING OR END, JUST THE ARRAY.`
 
 async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-turbo"){
   return await Promise.all(fileDiffs.map(async diff => {
