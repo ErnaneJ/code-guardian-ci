@@ -33,6 +33,24 @@ module.exports = function ClearDiff(diff, ignoreFiles){
 
 /***/ }),
 
+/***/ 2225:
+/***/ ((module) => {
+
+module.exports = function GenerateBodyReview({pr_number, diffData, diffFiltrado}) {
+  let body = `Pull Request #${pr_number} has been updated with: \n`
+  body += `- ${diffData.changes} changes \n`
+  body += `- ${diffData.additions} additions \n`
+  body += `- ${diffData.deletions} deletions \n\n`
+
+  body += 'Modifications: \n'
+  body += '```diff\n'
+  body += `${diffFiltrado}\n`
+  body += '```'
+  return body
+}
+
+/***/ }),
+
 /***/ 7351:
 /***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
@@ -30827,6 +30845,7 @@ const github = __nccwpck_require__(5438);
 
 const ClearDiff = __nccwpck_require__(5299);
 const CaptureDiffMetaData = __nccwpck_require__(5896);
+const GenerateBodyReview = __nccwpck_require__(2225);
 
 (async () => {
   try{

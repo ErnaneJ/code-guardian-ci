@@ -3,6 +3,7 @@ const github = require('@actions/github');
 
 const ClearDiff = require('./helpers/ClearDiff');
 const CaptureDiffMetaData = require('./helpers/CaptureDiffMetaData');
+const GenerateBodyReview = require('./helpers/GenerateBodyReview');
 
 (async () => {
   try{
