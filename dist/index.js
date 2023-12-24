@@ -4,16 +4,18 @@
 /***/ 5896:
 /***/ ((module) => {
 
-module.exports = function CaptureDiffMetaData(changedFiles) {
+function CaptureDiffMetaData(changedFiles) {
   let diffData = { additions: 0, deletions: 0,  changes: 0 };
 
   return changedFiles.reduce((acc, file) => {
     acc.additions += file.additions;
     acc.deletions += file.deletions;
     acc.changes += file.changes;
-    return acc;
+    // return acc;
   }, diffData);
 }
+
+module.exports = CaptureDiffMetaData;
 
 /***/ }),
 
@@ -37,18 +39,16 @@ const OpenAIApi = __nccwpck_require__(47);
 
 // only for testing
 const promptBase = `You are a code CRITICITOR. Its task is to return an array of objects with the following structure:
+
 [{
   "path": "STRING", // File path
   "position": "INTEGER", // Revised modification line (VALUE BETWEEN 1 AND THE NUMBER OF LINES IN THE FILE)
   "body": "STRING[MARKDOWN]" // Review comment
 }, ...]
 
-Important points:
-- ONLY VALIDATE THE FILE SYNTAX, IT IS NOT NECESSARY TO VALIDATE ANYTHING BEYOND THAT
-- FOCUS ON SYNTAX ERRORS IN THE LANGUAGE OF THE FILE IN QUESTION
-- Remember that what you are seeing about the file is just a snippet of it, so don't pay attention to the context of the code, just validate the syntax
+Its job is to point out possible problems caused by the change (diff) made. Your review comment must be in markdown format.
 
-ATTENTION: YOUR RETURN MUST BE JUST THE ARRAY IN JSON.STRINGIFY FORMAT, WITHOUT TEXT OR "\`" AT THE BEGINNING OR END, JUST THE ARRAY.`
+ATTENTION: YOUR CODE REVIEW MUST BE JUST THE ARRAY IN JSON.STRINGIFY FORMAT, WITHOUT TEXT OR "\`" AT THE BEGINNING OR END, JUST THE ARRAY.`
 
 async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-turbo"){
   return await Promise.all(fileDiffs.map(async diff => {
@@ -49062,7 +49062,6 @@ const GenerateCodeReview = __nccwpck_require__(3097);
         lines: lines.filter(line => !line.startsWith('-') && !line.startsWith('\\')).length,
       };
     });
-    console.log(rawFileDiffs)
     const fileDiffs = rawFileDiffs.filter(fileDiff => {
       fileDiff.path = fileDiff.path.replace(/^((a|b)\/)+/g, '');
       return !ignoredPaths.some(ignoredPath => {
