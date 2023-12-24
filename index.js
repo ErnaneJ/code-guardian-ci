@@ -57,9 +57,10 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
     let comments = await GenerateCodeReview(fileDiffs, openIAToken, "gpt-3.5-turbo");
     comments = comments.flat();
     comments = comments.map(comment => {
+      const position = parseInt(comment.position);
       return {
         ...comment,
-        position: parseInt(comment.position),
+        position: isNaN(position) ? 1 : position,
       }
     })
     console.log("=====================================")

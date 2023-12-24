@@ -35,7 +35,7 @@ module.exports = function GenerateBodyReview({pr_number, diffData}) {
 
 const OpenAIApi = __nccwpck_require__(47);
 
-const promptBase = `Você é um Code Reviewer. Sua única e principal funcionalidade está desscrita abaixo:
+const promptBase = `Você é um Code Reviewer. Sua única e principal funcionalidade está descrita abaixo:
 o usuário irá lhe passar um objeto que segue a seguinte estrutura:
 {
   path: STRING, //caminho do arquivo
@@ -53,10 +53,11 @@ Esse objeto representa o diff de um arquivo com relação à um commit. E você 
 
 Atenção: !! SEU RETORNO DEVE SER SOMENTE O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INICIO E/OU NO FIM, APENAS O ARRAY !!
 
-Esse array representa um code-review que você estará fazendo com base no diff passado no objeto anterior.  Cada objeto desse array representará uma possível melhoria a ser feita no trecho de código apontado.
+Esse array representa um code-review que você estará fazendo com base no diff passado no objeto anterior. Cada objeto desse array representará uma possível melhoria a ser feita no trecho de código apontado.
 
 Sempre respeite as seguintes regras:
-- Se a linha não houver o que comentar, não gere (DE FORMA ALGUMA) um objeto para ela. 
+- Se a linha não houver o que comentar, não gere, DE FORMA ALGUMA, um objeto para ela. 
+- Sempre siga a estrutura do objeto de retorno, NÃO MUDE NADA NELA.
 - No comentário da revisão seja claro e objetivo sempre que possível. Não dê sugestões a menos que sejam realmente necessárias. 
 - Sempre use markdown para o comentário da revisão, principalmente para trecho de código.
 - Não crie review desnecessário e/ou repetido.`
@@ -49081,9 +49082,10 @@ const GenerateCodeReview = __nccwpck_require__(3097);
     let comments = await GenerateCodeReview(fileDiffs, openIAToken, "gpt-3.5-turbo");
     comments = comments.flat();
     comments = comments.map(comment => {
+      const position = parseInt(comment.position);
       return {
         ...comment,
-        position: parseInt(comment.position),
+        position: isNaN(position) ? 1 : position,
       }
     })
     console.log("=====================================")
