@@ -44,6 +44,7 @@ async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-tur
     }catch(e){
       console.log(`=== ERROR [${ diff.path }] ===`);
       console.log(response.choices[0].message.content);
+      comsole.log(e);
       console.log(`=== END ERROR ===`);
       return []
     } 
