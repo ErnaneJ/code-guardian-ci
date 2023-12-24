@@ -48,13 +48,20 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
       };
     });
     const fileDiffs = rawFileDiffs.filter(fileDiff => {
-      tempFileDiffPath = fileDiff.path.replace(/^(a|b)\//g, '');
+      fileDiff.path = fileDiff.path.replace(/^(a|b)\//g, '');
       return !ignoredPaths.some(ignoredPath => {
-        return tempFileDiffPath.startsWith(ignoredPath) || tempFileDiffPath.startsWith('/' + ignoredPath) 
+        return fileDiff.path.startsWith(ignoredPath) || fileDiff.path.startsWith('/' + ignoredPath) 
       });
     });
 
-    const comments = await GenerateCodeReview(fileDiffs, openIAToken, "gpt-3.5-turbo");
+    let comments = await GenerateCodeReview(fileDiffs, openIAToken, "gpt-3.5-turbo");
+    comments = comments.flat();
+    comments = comments.map(comment => {
+      return {
+        ...comment,
+        position: parseInt(comment.position),
+      }
+    })
     console.log("=====================================")
     console.log(comments)
     console.log("=====================================")
