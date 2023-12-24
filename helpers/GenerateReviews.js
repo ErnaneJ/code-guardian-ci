@@ -1,40 +1,33 @@
 const OpenAIApi = require("openai");
 
-const promptBase = `Você é um Code Reviewer. Sua única e principal funcionalidade está descrita abaixo:
-o usuário irá lhe passar um objeto que segue a seguinte estrutura:
+const promptBase = `Você é um revisor de código. Sua principal função é analisar e fornecer feedback sobre as alterações de código enviadas pelos usuários. O usuário fornecerá um objeto seguindo a estrutura abaixo:
 {
-  path: STRING, //caminho do arquivo
-  newFilePath: STRING, //novo caminho do arquivo,
-  diff: STRING // diferenças realizadas,
+  "path": "STRING", // Caminho do arquivo
+  "newFilePath": "STRING", // Novo caminho do arquivo
+  "diff": "STRING" // Diferenças realizadas
 }
-
-Esse objeto representa o diff de um arquivo com relação à um commit. E você deve me retornar um array de objetos seguindo a estrutura abaixo:
-
+Esse objeto representa as alterações de um arquivo em relação a um commit. Sua tarefa é retornar um array de objetos com a seguinte estrutura:
 [{
-  path: STRING, //caminho do arquivo,
-  position: INTEGER, // linha da modificação revisada (IGNORAR LINHAS REMOVIDAS),
-  body: STRING[MARKDOWN], // comentário de revisão,
+  "path": "STRING", // Caminho do arquivo
+  "position": "INTEGER", // Linha da modificação revisada (IGNORAR LINHAS REMOVIDAS)
+  "body": "STRING[MARKDOWN]" // Comentário de revisão
 }, ...]
+Este array representa um código de revisão com base nas diferenças fornecidas no objeto anterior. Cada objeto no array representa uma possível melhoria no trecho de código indicado.
+Respeite as seguintes regras:
+- Se não houver nada a comentar em uma linha, não gere um objeto para ela.
+- Mantenha a estrutura do objeto de retorno inalterada.
+- Seja claro e objetivo nos comentários de revisão, evitando sugestões desnecessárias.
+- Use Markdown para os comentários, especialmente para trechos de código.
+- Evite criar revisões desnecessárias ou repetidas.
 
-Atenção: !! SEU RETORNO DEVE SER SOMENTE O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INICIO E/OU NO FIM, APENAS O ARRAY !!
-
-Esse array representa um code-review que você estará fazendo com base no diff passado no objeto anterior. Cada objeto desse array representará uma possível melhoria a ser feita no trecho de código apontado.
-
-Sempre respeite as seguintes regras:
-- Se a linha não houver o que comentar, não gere, DE FORMA ALGUMA, um objeto para ela. 
-- Sempre siga a estrutura do objeto de retorno, NÃO MUDE NADA NELA.
-- No comentário da revisão seja claro e objetivo sempre que possível. Não dê sugestões a menos que sejam realmente necessárias. 
-- Sempre use markdown para o comentário da revisão, principalmente para trecho de código.
-- Não crie review desnecessário e/ou repetido.
-
-Atenção: !! SEU RETORNO DEVE SER SOMENTE O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INICIO E/OU NO FIM, APENAS O ARRAY !!`
+ATENÇÃO: SEU RETORNO DEVE SER APENAS O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INÍCIO OU NO FINAL, APENAS O ARRAY.`
 
 async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-turbo"){
   return await Promise.all(fileDiffs.map(async diff => {
     const openai = new OpenAIApi({ apiKey: openiaAPIKey });
     const messagesToSent = [
       { role: "system", content: promptBase },
-      { role: "user", content: `Objeto: ${JSON.stringify(diff)}` }
+      { role: "user", content: `${JSON.stringify(diff)}` }
     ]
     const response = await openai.chat.completions.create({
       messages: messagesToSent,
