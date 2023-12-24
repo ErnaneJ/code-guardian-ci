@@ -61,7 +61,7 @@ const GenerateBodyReview = require('./helpers/GenerateBodyReview');
       repo,
       pull_number: pr_number,
       commit_id: commitID,
-      body: GenerateBodyReview({pr_number, diffData, diffFiltrado}),
+      body: GenerateBodyReview({pr_number, diffData, diffFiltrado: '...'}),
       event: 'COMMENT',
       comments: [
         {
