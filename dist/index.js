@@ -49080,7 +49080,7 @@ const GenerateCodeReview = __nccwpck_require__(3097);
       const position = parseInt(comment.position);
       return {
         ...comment,
-        position: isNaN(position) ? 1 : position,
+        position: 1,
       }
     })
     console.log("=====================================")
