@@ -60,7 +60,7 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
       const position = parseInt(comment.position);
       return {
         ...comment,
-        position: 1,
+        position: isNaN(position) ? 1 : position,
       }
     })
     console.log("=====================================")
