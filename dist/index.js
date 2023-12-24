@@ -33545,9 +33545,15 @@ const GenerateBodyReview = __nccwpck_require__(2225);
 
     const patches = parsePatch(diffPR);
     const fileDiffs = patches.map(patch => {
+      const isFileRemoved = patch.oldFileName === '/dev/null';
+      const isFileAdded = patch.newFileName === '/dev/null';
+  
       return {
-        path: patch.oldFileName || patch.newFileName,
+        path: isFileRemoved ? patch.newFileName : patch.oldFileName,
+        newFilePath: patch.newFileName,
         diff: patch.hunks.map(hunk => hunk.lines.join('\n')).join('\n'),
+        isFileAdded,
+        isFileRemoved,
       };
     });
     console.log('fileDiffs', fileDiffs);
