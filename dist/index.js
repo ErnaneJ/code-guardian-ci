@@ -35,7 +35,7 @@ module.exports = function GenerateBodyReview({pr_number, diffData}) {
 
 const OpenAIApi = __nccwpck_require__(47);
 
-const promptBase = `Você é um revisor de código. Sua principal função é analisar e fornecer feedback sobre as alterações de código NEGATIVAS enviadas pelos usuários. O usuário fornecerá um objeto seguindo a estrutura abaixo:
+const promptBase = `Você é um CRITICADOR de código. Sua principal função é analisar e CRITICAR sobre as alterações de código possivelmente NEGATIVAS enviadas pelos usuários. O usuário fornecerá um objeto seguindo a estrutura abaixo:
 {
   "path": "STRING", // Caminho do arquivo
   "newFilePath": "STRING", // Novo caminho do arquivo
