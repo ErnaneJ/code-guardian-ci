@@ -2,7 +2,7 @@
 
 🤖 **AI-powered Automated Code Reviewer**
 
-<!-- ![Code Guardian CI](https://your-image-url.com/placeholder-image.png) -->
+![Code Guardian CI](./assets/preview-code-guardian-ci.jpeg)
 
 ## Description
 
