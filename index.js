@@ -55,7 +55,9 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
     });
 
     const comments = await GenerateCodeReview(fileDiffs, openIAToken, "gpt-3.5-turbo");
+    console.log("=====================================")
     console.log(comments)
+    console.log("=====================================")
     await octokit.rest.pulls.createReview({
       owner,
       repo,

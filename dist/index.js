@@ -51,14 +51,14 @@ Esse objeto representa o diff de um arquivo com relação à um commit. E você 
   body: 'comentário de revisão',
 }, ...]
 
+Atenção: !! SEU RETORNO DEVE SER SOMENTE O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INICIO E/OU NO FIM, APENAS O ARRAY !!
+
 Esse array representa um code-review que você estará fazendo com base no diff passado no objeto anterior.  Cada objeto desse array representará uma possível melhoria a ser feita no trecho de código apontado.
 
 Sempre respeite as seguintes regras:
 - Se a linha não houver o que comentar, não gere (DE FORMA ALGUMA) um objeto para ela. 
 - No comentário da revisão seja claro e objetivo sempre que possível. Não dê sugestões a menos que sejam realmente necessárias. 
-- Sempre use markdown para o comentário da revisão, principalmente para trecho de código.
-
-Atenção: !! SEU RETORNO DEVE SER SOMENTE O ARRAY, SEM TEXTO OU "\`" NO INICIO E/OU NO FIM, APENAS O ARRAY !!`
+- Sempre use markdown para o comentário da revisão, principalmente para trecho de código.`
 
 async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-turbo"){
   return await Promise.all(fileDiffs.map(async diff => {
@@ -71,7 +71,12 @@ async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-tur
       messages: messagesToSent,
       model: gptModel,
     });
-    return response.choices[0].message.content; 
+    try{
+      return JSON.parse(response.choices[0].message.content);
+    }catch(e){
+      console.log(response.choices[0].message.content)
+      return []
+    } 
   }));
 }
 
@@ -49071,7 +49076,9 @@ const GenerateCodeReview = __nccwpck_require__(3097);
     });
 
     const comments = await GenerateCodeReview(fileDiffs, openIAToken, "gpt-3.5-turbo");
+    console.log("=====================================")
     console.log(comments)
+    console.log("=====================================")
     await octokit.rest.pulls.createReview({
       owner,
       repo,
