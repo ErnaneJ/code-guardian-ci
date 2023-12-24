@@ -58,8 +58,11 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
     comments = comments.flat();
     comments = comments.map(comment => {
       const position = parseInt(comment.position);
+      const path = comment.path.replace(/^((a|b)\/)+/g, '');
+      console.log(comment.path, '=>', path);
       return {
         ...comment,
+        path: path,
         position: isNaN(position) ? 1 : (position > 20 ? 1 : position),
       }
     })
