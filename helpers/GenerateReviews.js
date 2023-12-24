@@ -7,6 +7,13 @@ const promptBase = `Você é um CRITICADOR de código. Sua tarefa é retornar um
   "body": "STRING[MARKDOWN]" // Comentário de revisão
 }, ...]
 
+Pontos importantes:
+- Não retorne mais de 10 elementos no array
+- Não crie review sobre sugestões, apenas sobre erros
+- Não comente nada sobre o código que não seja um erro
+- Não comente sobre adicionar ou remover linhas em branco
+- FOQUE EM ERROS DE SINTAXE DA LINGUAGEM DO ARQUIVO EM QUESTÃO
+
 Cada elemento do array representa um possível erro encontrado por você no diff enviado. Você pode retornar quantos elementos quiser, mas lembre-se que o objetivo é retornar apenas os erros importantes.
 
 ATENÇÃO: SEU RETORNO DEVE SER APENAS O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INÍCIO OU NO FINAL, APENAS O ARRAY.`
