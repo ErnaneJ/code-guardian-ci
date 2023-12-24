@@ -47,7 +47,7 @@ Esse objeto representa o diff de um arquivo com relação à um commit. E você 
 
 [{
   path: STRING, //caminho do arquivo,
-  position: INTEGER, // linha da modificação revisada,
+  position: INTEGER, // linha da modificação revisada (IGNORAR LINHAS REMOVIDAS),
   body: STRING[MARKDOWN], // comentário de revisão,
 }, ...]
 
@@ -60,7 +60,9 @@ Sempre respeite as seguintes regras:
 - Sempre siga a estrutura do objeto de retorno, NÃO MUDE NADA NELA.
 - No comentário da revisão seja claro e objetivo sempre que possível. Não dê sugestões a menos que sejam realmente necessárias. 
 - Sempre use markdown para o comentário da revisão, principalmente para trecho de código.
-- Não crie review desnecessário e/ou repetido.`
+- Não crie review desnecessário e/ou repetido.
+
+Atenção: !! SEU RETORNO DEVE SER SOMENTE O ARRAY NO FORMATO JSON.STRINGIFY, SEM TEXTO OU "\`" NO INICIO E/OU NO FIM, APENAS O ARRAY !!`
 
 async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-turbo"){
   return await Promise.all(fileDiffs.map(async diff => {
