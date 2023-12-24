@@ -48,6 +48,7 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
         lines: lines,
       };
     });
+    console.log(rawFileDiffs)
     const fileDiffs = rawFileDiffs.filter(fileDiff => {
       fileDiff.path = fileDiff.path.replace(/^((a|b)\/)+/g, '');
       return !ignoredPaths.some(ignoredPath => {
