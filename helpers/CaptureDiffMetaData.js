@@ -5,7 +5,7 @@ function CaptureDiffMetaData(changedFiles) {
     acc.additions += file.additions;
     acc.deletions += file.deletions;
     acc.changes += file.changes;
-    // return acc;
+    return acc;
   }, diffData);
 }
 
