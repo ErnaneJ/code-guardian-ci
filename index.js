@@ -65,7 +65,7 @@ const GenerateCodeReview = require('./helpers/GenerateReviews');
       commit_id: commitID,
       body: GenerateBodyReview({pr_number, diffData, diffFiltrado: '...'}),
       event: 'COMMENT',
-      comments: comments
+      comments: comments.flat()
     });
 
   } catch (error) {

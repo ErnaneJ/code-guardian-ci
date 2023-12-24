@@ -49086,7 +49086,7 @@ const GenerateCodeReview = __nccwpck_require__(3097);
       commit_id: commitID,
       body: GenerateBodyReview({pr_number, diffData, diffFiltrado: '...'}),
       event: 'COMMENT',
-      comments: comments
+      comments: comments.flat()
     });
 
   } catch (error) {
