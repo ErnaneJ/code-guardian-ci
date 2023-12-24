@@ -65,7 +65,7 @@ async function GenerateCodeReview(fileDiffs, openiaAPIKey, gptModel="gpt-3.5-tur
     const openai = new OpenAIApi({ apiKey: openiaAPIKey });
     const messagesToSent = [
       { role: "system", content: promptBase },
-      { role: "user", content: `Objeto: ${JSON.stringify(diff)}`, name: owner }
+      { role: "user", content: `Objeto: ${JSON.stringify(diff)}` }
     ]
     const response = await openai.chat.completions.create({
       messages: messagesToSent,
